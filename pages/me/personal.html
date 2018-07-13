@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>彩票网</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../lib/mui/css/mui.css">
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../css/cropper.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/sitelogo.css">
+    <script src="../../lib/jquery/jquery.min.js"></script>
+    <script src="../../lib/cutimg/bootstrap.min.js"></script>
+    <script src="../../lib/cutimg/cropper.js"></script>
+    <script src="../../lib/cutimg/sitelogo11.js"></script>
+    <script src="../../lib/cutimg/html2canvas.js"></script>
+    <script src="../../lib/artTemplate/template-native.js"></script>
+    <script src="../../lib/mui/js/mui.js"></script>
+    <style>
+        * {
+            font-size: .28rem;
+        }
+
+        input {
+            text-indent: 0;
+            background: transparent;
+            border: 0 none;
+            resize: none;
+            outline: none;
+            /*清除选中效果的默认蓝色边框 */
+            -webkit-appearance: none;
+            /*清除浏览器默认的样式 */
+            line-height: normal;
+        }
+
+        .list {
+            border-bottom: 1px solid #dadada;
+            background: #ffffff;
+            padding: .1rem 0;
+            overflow: hidden;
+        }
+
+        .list.mid {
+            padding: .2rem 0;
+        }
+
+        .big {
+            height: 1.4rem;
+        }
+
+        .small {
+            height: .9rem;
+        }
+
+        .list .left {
+            float: left;
+            color: #333333;
+            width: 30%;
+            padding-left: 0.2rem;
+        }
+
+        .list .right {
+            float: left;
+            color: #555555;
+            width: 70%;
+            padding-right: 0.2rem;
+        }
+
+        .list input.right {
+            font-size: .28rem;
+        }
+
+        .big .left,
+        .big .right {
+            height: 1.2rem;
+            line-height: 1.2rem;
+        }
+
+        .small .left,
+        .small .right {
+            height: .7rem;
+            line-height: .7rem;
+            outline: none;
+        }
+
+        .mid .left {
+            height: .8rem;
+            line-height: .8rem;
+        }
+
+        .mid .right {
+            height: .8rem;
+            line-height: .4rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        .big .headimg {
+            display: inline-block;
+            width: 1.2rem;
+            height: 1.2rem;
+            border-radius: 0.05rem;
+            background: #e5e5e5;
+        }
+
+        .bt {
+            display: block;
+            border-radius: .05rem;
+            width: 5.3rem;
+            height: .8rem;
+            line-height: 0.8rem;
+            background: #d3233c;
+            text-align: center;
+            font-size: 0.32rem;
+            color: #ffffff;
+            margin: .3rem auto;
+        }
+
+        select {
+            border: none;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            background: #ffffff;
+            padding-right: 14px;
+            font-size: .28rem;
+            color: #999999;
+        }
+
+        #wrap {
+            position: relative;
+        }
+
+        #wrap .wrap_mask {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 99;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        a:link {
+            text-decoration: none;
+        }
+
+        a:visited {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 头部 start -->
+    <header class="navbar-fixed-top clearfix">
+        <a href="javascript:history.back(-1)" class="return fl">
+            <img src="../../images/back.png">
+            <span>返回</span>
+        </a>
+        <p class="fl">个人资料</p>
+    </header>
+    <div style="height: 0.8rem"></div>
+    <!-- 头部  end -->
+
+    <form class="personal_info clearfix">
+	    <div class="clearfix" id="wrap">
+	        <div class="wrap_mask"></div>
+	        <div class="list big" type="button" data-toggle="modal" data-target="#avatar-modal" onClick="$('input[id=avatarInput]').click();">
+	            <span class="left">头像</span>
+	            <span class="right">
+	                <span class="headimg">
+	                    <img src="" alt="">
+	                </span>
+	            </span>
+	        </div>
+	        <div class="list small">
+	            <span class="left">用户名</span>
+	            <span class="right" id="nick"></span>
+	        </div>
+	        <div class="list small">
+	            <span class="left">性别</span>
+	            <select class="right" id="gender" name="gender">
+	                <option value="0">男</option>
+	                <option value="1">女</option>
+	            </select>
+	        </div>
+	        <div class="list small">
+	            <span class="left">身份证号码</span>
+	            <span class="right" id="idcard"></span>
+	        </div>
+	        <div class="list small">
+	            <span class="left">手机号码</span>
+	            <span class="right" id="phone"></span>
+	        </div>
+	        <div class="list small">
+	            <span class="left">省</span>
+	            <select class="right" id="province" name="provinceCode">
+	            </select>
+	        </div>
+	        <div class="list small">
+	            <span class="left">市</span>
+	            <select class="right" id="city" name="cityCode">
+	            </select>
+	        </div>
+	        <div class="list small">
+	            <span class="left">区县</span>
+	            <select class="right" id="district" name="districtCode">
+	            </select>
+	        </div>
+	        <div class="list small">
+	            <span class="left">最后登陆时间</span>
+	            <span class="right" id="lastLoginTime"></span>
+	        </div>
+	    </div>
+	    <button class="bt" id="editInfo" data-state="edit">编辑</button>
+    </form>
+
+    <!-- 弹出裁剪框 start-->
+    <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form class="avatar-form" action="upload-logo.php" enctype="multipart/form-data" method="post">
+                    <button class="avatar-save " type="button" data-dismiss="modal">确定</button>
+                    <div class="modal-body">
+                        <div class="avatar-body">
+                            <div class="avatar-upload">
+                                <input class="avatar-src" name="avatar_src" type="hidden">
+                                <input class="avatar-data" name="avatar_data" type="hidden">
+                                <input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="avatar-wrapper"></div>
+                                </div>
+                                <div class="col-md-3 hideyulang">
+                                    <div class="avatar-preview preview-lg" id="imageHead"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+    <!-- 弹出剪裁框 end -->
+</body>
+<script type="text/template" id="provinceList">
+    <%for(var i =0; i<data.length;i++){%>
+        <option value="<%=data[i].regionCode%>"><%=data[i].regionName%></option>
+    <%}%>   
+</script>
+<script type="text/template" id="cityList">
+    <%for(var i =0; i<childList.length; i++){%>
+        <option value="<%=childList[i].regionCode%>"><%=childList[i].regionName%></option>
+    <%}%>   
+</script>
+<script type="text/template" id="districtList">
+    <%for(var i =0; i<childList.length; i++){%>
+        <option value="<%=childList[i].regionCode%>"><%=childList[i].regionName%></option>
+    <%}%>
+</script>
+<script>
+    // 渲染省数据
+    let addressData = JSON.parse(localStorage.getItem('addressData'))
+    let detail = template('provinceList', addressData)
+    $('#province').html(detail)
+    function defaultCity() {
+        let selectRegionCode = $('#province').val()
+        // console.log(selectRegionCode)
+        if (selectRegionCode != 0) {
+            if (selectRegionCode == '110000') {
+                $('#city').html('<option value="110000">北京市</option>')
+                // alert(selectRegionCode)
+            } else if (selectRegionCode == '120000') {
+                $('#city').html('<option value="120000">天津市</option>')
+            } else if (selectRegionCode == '310000') {
+                $('#city').html('<option value="310000">上海市</option>')
+            } else if (selectRegionCode == '500000') {
+                $('#city').html('<option value="500000">重庆市</option>')
+            } else if (selectRegionCode == '810000') {
+                $('#city').html('')
+                $('#district').html('')
+            } else if (selectRegionCode == '820000') {
+                $('#city').html('')
+                $('#district').html('')
+            }else if (selectRegionCode == '710000') {
+                $('#city').html('')
+                $('#district').html('')
+            }  else {
+                let addressData = JSON.parse(localStorage.getItem('addressData'))
+                addressData.data.map((pVal) => {
+                    if (selectRegionCode == pVal.regionCode) {
+                        let cityDetail = template('cityList', pVal)
+                        $('#city').html(cityDetail)
+                    }
+                })
+            }
+        }
+    }
+    function defaultDistrict() {
+        let selectRegionCode = $('#province').val()
+        let selectDistrictCode = $('#city').val()
+        if (selectDistrictCode != 0) {
+            let addressData = JSON.parse(localStorage.getItem('addressData'))
+            addressData.data.map((pVal) => {
+                if (selectRegionCode == pVal.regionCode) {
+                    pVal.childList.map((cVal) => {
+                        if (selectDistrictCode == cVal.regionCode) {
+                            let districtDetail = template('districtList', cVal)
+                            $('#district').html(districtDetail)
+                        }
+                    })
+                }
+            })
+        } 
+    }
+    $('#city').on('focus', function () {
+        defaultCity()
+    })
+    $('#district').on('focus', function () {
+        defaultDistrict()
+    })
+    $('#province').on('change', function () {
+        defaultCity()
+        defaultDistrict()
+    })
+    $('#city').on('change', function () {
+        let selectRegionCode = $('#province').val()
+        let selectDistrictCode = $('#city').val()
+        if (selectDistrictCode != 0) {
+            let addressData = JSON.parse(localStorage.getItem('addressData'))
+            addressData.data.map((pVal) => {
+                if (selectRegionCode == pVal.regionCode) {
+                    pVal.childList.map((cVal) => {
+                        if (selectDistrictCode == cVal.regionCode) {
+                            let districtDetail = template('districtList', cVal)
+                            $('#district').html(districtDetail)
+                        }
+                    })
+                }
+            })
+        } 
+    })
+    // 个人信息数据渲染
+    memberinfo()
+    function memberinfo() {
+        let result = JSON.parse(localStorage.getItem('menberInfo'))
+        $(".headimg img").attr("src",result.data.headImages)
+        $("#nick").html(result.data.memberName);
+        $("#idcard").html(result.data.idCardNumber);
+        $("#phone").html(result.data.mobile);
+        $("#lastLoginTime").html(result.data.lastLoginTime);
+		$("#gender").find("option[value='"+result.data.gender+"']").attr("selected", true)
+        let addressData = JSON.parse(localStorage.getItem('addressData'))
+        console.log(addressData.data)
+        // 存储用户原本地址
+        addressData.data.map((val) => {
+            if (val.regionCode == result.data.provinceCode) {
+                let userProvince = val.regionName
+                let codeProvince = val.regionCode
+                console.log(userProvince)
+                let prilist=$('#province option')
+                console.log(codeProvince)
+                // prilist.map((val1)=>{
+                //     console.log(prilist[val1].value)  
+                // })
+                $("#province").find("option[value='"+codeProvince+"']").attr("selected",true)
+                val.childList.map((val2) => {
+                    if (val2.regionCode == result.data.cityCode) {
+                        let userCity = val2.regionName
+                        let codeCity = val2.regionCode
+                        console.log(codeCity)
+                        defaultCity()
+                        $("#city").find("option[value='"+codeCity+"']").attr("selected",true)
+                        val2.childList.map((val3) => {
+                            if (val3.regionCode == result.data.districtCode) {
+                                let userDistrict = val3.regionName
+                                let codeDistrict = val3.regionCode
+                                console.log(userDistrict)
+                                defaultDistrict()
+                                $("#district").find("option[value='"+codeDistrict+"']").attr("selected",true)
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+    //点击编辑/保存内容
+    $('.bt').on('click', function (e) {
+        e.preventDefault()
+        if ($(this).data('state') == 'edit') {
+            $(this).html('保存')
+            $(this).data('state','save')
+            $('.wrap_mask').hide()
+            // msgEdit();
+        } else if ($(this).data('state') == 'save') {
+            let provinceSlected = $('#province option:selected').val()
+            let citySlected = $('#city option:selected').val()
+            let districtSlected = $('#district option:selected').val()
+            if(provinceSlected == 0 || citySlected == 0 || districtSlected == 0){
+                mui.alert('请选择完整地址信息')
+                return
+            }
+            var formArray = $(".personal_info").serializeArray();
+    	    var dataObj = {};
+            for(var i=0;i<formArray.length;i++){
+                dataObj[formArray[i].name]=formArray[i].value;
+            }
+            dataObj.headImages = $(".headimg img").attr("src");
+            // 个人信息提交修改
+            $.ajax({
+                type: "POST",
+                url: "/member/modify.json",
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                beforeSend: function (request) {
+                    let token = window.sessionStorage.getItem("token");
+                    request.setRequestHeader("token", token);
+                },
+                data: dataObj,
+                success: function (data) {
+                    let localStorageData = JSON.parse(localStorage.getItem('menberInfo'))
+                    Object.keys(data.data).map(key => {
+                        localStorageData.data[key] = data.data[key]
+                    })
+                    localStorage.setItem('menberInfo',JSON.stringify(localStorageData))
+                }
+            });
+            $(this).html('编辑');
+            $(this).data('state','edit')
+            $('.wrap_mask').show();
+        }
+    });
+    // 增加图片
+    $(".avatar-save").unbind("click").bind("click", function () {
+        let img_lg = document.getElementById('imageHead');
+        let canvas = document.createElement("canvas"),
+            w = $('#imageHead').width(),
+            h = $('#imageHead').height();
+        canvas.width = w * 4;
+        canvas.height = h * 4;
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        let context = canvas.getContext("2d");
+        context.scale(4, 4);
+        // 截图小的显示框内的内容
+        html2canvas(img_lg, {
+            allowTaint: true,
+            taintTest: false,
+            logging: true,
+            canvas: canvas,
+            onrendered: function (canvas) {
+                canvas.id = "mycanvas";
+                //生成base64图片数据
+                let dataUrl = canvas.toDataURL("image/jpeg");
+                let newImg = document.createElement("img");
+                newImg.src = dataUrl;
+                $(".headimg").html("<img style='border-radius: 0.05rem;' src='" + newImg.src + "' alt=''>");
+            }
+        });
+    })
+    // 蒙层大小
+    let wraph = $('#wrap').height();
+    let wrapw = $('#wrap').width();
+    $('.wrap_mask').css({
+        height: wraph,
+        width: wrapw
+    });
+
+</script>
+
+</html>
